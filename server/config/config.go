@@ -142,7 +142,7 @@ func NewConfig() *Config {
 
 	fs.BoolVar(&cfg.Version, "V", false, "print version information and exit")
 	fs.BoolVar(&cfg.Version, "version", false, "print version information and exit")
-	fs.StringVar(&cfg.configFile, "config", "", "Config file")
+	fs.StringVar(&cfg.configFile, "pd-config", "", "Config file")
 	fs.BoolVar(&cfg.ConfigCheck, "config-check", false, "check config file validity and exit")
 
 	fs.StringVar(&cfg.Name, "name", "", "human-readable name for this pd member")
@@ -250,7 +250,7 @@ func (c *Config) Parse(arguments []string) error {
 	// Parse first to get config file.
 	err := c.flagSet.Parse(arguments)
 	if err != nil {
-		return errors.WithStack(err)
+		log.Info("parse flag error", zap.Error(err))
 	}
 
 	// Load config file if specified.
@@ -278,7 +278,7 @@ func (c *Config) Parse(arguments []string) error {
 		}
 	}
 
-	// Parse again to replace with command line options.
+/*	// Parse again to replace with command line options.
 	err = c.flagSet.Parse(arguments)
 	if err != nil {
 		return errors.WithStack(err)
@@ -287,7 +287,7 @@ func (c *Config) Parse(arguments []string) error {
 	if len(c.flagSet.Args()) != 0 {
 		return errors.Errorf("'%s' is an invalid flag", c.flagSet.Arg(0))
 	}
-
+*/
 	err = c.Adjust(meta)
 	return err
 }
@@ -639,7 +639,7 @@ const (
 	defaultLeaderScheduleLimit    = 4
 	defaultRegionScheduleLimit    = 2048
 	defaultReplicaScheduleLimit   = 64
-	defaultMergeScheduleLimit     = 8
+	defaultMergeScheduleLimit     = 0
 	defaultHotRegionScheduleLimit = 4
 	defaultStoreBalanceRate       = 15
 	defaultTolerantSizeRatio      = 0

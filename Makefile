@@ -48,7 +48,7 @@ dev: build tools check test
 
 ci: build check basic-test
 
-build: pd-server pd-ctl
+build: pd-server
 tools: pd-tso-bench pd-recover pd-analysis pd-heartbeat-bench
 pd-server: export GO111MODULE=on
 ifeq ("$(WITH_RACE)", "1")
